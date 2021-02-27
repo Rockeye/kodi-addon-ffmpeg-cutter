@@ -46,7 +46,7 @@ msgstr "Spuren"
 
 msgctxt "#32017"
 msgid "Always ask"
-msgstr "immer fragen"
+msgstr "jedes mal fragen"
 
 msgctxt "#32018"
 msgid "All but audio for visual impaired and teletext"
@@ -198,7 +198,7 @@ msgstr "Programmdateien"
 
 msgctxt "#32101"
 msgid "File not accessable"
-msgstr "Quelldatei auffindbar"
+msgstr "Quelldatei nicht auffindbar"
 
 msgctxt "#32102"
 msgid "Video file not found or accessable from here"

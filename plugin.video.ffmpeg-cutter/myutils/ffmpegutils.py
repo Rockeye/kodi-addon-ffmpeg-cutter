@@ -1,9 +1,9 @@
 # coding=utf-8
 
 import json
-import kodiutils
 import re
 import subprocess
+from myutils import kodiutils
 import xbmc
 
 SW_HIDE = 0
@@ -11,7 +11,6 @@ STARTF_USESHOWWINDOW = 1
 
 FFMPEG_PROGRESS_PATTERN = re.compile(
     r"frame=\s*(\d+)\s+fps=\s*([0-9\.]+)\s+q=([0-9\.-]+) [A-Z]?size=\s*([0-9]+[A-Za-z]+) time=([0-9:\.]+) bitrate=([^ ]+) speed=\s*([0-9\.]+)x")
-
 
 class Progress:
 
@@ -65,7 +64,7 @@ class FFMpegUtils:
         call = [self._ffmpeg_executable, "-hide_banner", "-y"]
         call += params
 
-        xbmc.log(" ".join(call), xbmc.LOGNOTICE)
+        xbmc.log(" ".join(call), xbmc.LOGINFO)
         p = subprocess.Popen(call,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT,
@@ -95,7 +94,7 @@ class FFMpegUtils:
         call = [self._ffprobe_executable, "-v", "quiet"]
         call += params
 
-        xbmc.log(" ".join(call), xbmc.LOGNOTICE)
+        xbmc.log(" ".join(call), xbmc.LOGINFO)
         p = subprocess.Popen(call,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
@@ -107,7 +106,7 @@ class FFMpegUtils:
             xbmc.log(err, xbmc.LOGERROR)
             raise OSError(err)
 
-        return out.decode(kodiutils.getpreferredencoding())
+        return out
 
     def inspect_media(self, filename):
 

@@ -8,7 +8,6 @@ import time
 import xbmc
 import xbmcaddon
 import xbmcgui
-import xbmcvfs
 from myutils import ffmpegutils, kodiutils, tvheadend
 
 
@@ -94,7 +93,6 @@ class Cutter:
         # determine full-qualified filename
         filename, recording = self._select_source(listitem)
         if filename is None or not os.path.isfile(filename):
-            xbmc.log(filename, xbmc.LOGERROR)
             xbmcgui.Dialog().notification(getMsg(32101),
                                           getMsg(32102),
                                           xbmcgui.NOTIFICATION_ERROR)
@@ -185,7 +183,7 @@ class Cutter:
         Returns full-qualified filename in filesystem or None
         """
 
-        filename = listitem.getfilename()
+        filename = listitem.getPath()
 
         localfile = None
         recording = None
@@ -284,7 +282,7 @@ class Cutter:
 
     def _select_bookmarks(self, listitem, ffprobe_json):
 
-        bookmarks = kodiutils.select_bookmarks(listitem.getfilename())
+        bookmarks = kodiutils.select_bookmarks(listitem.getPath())
         markers = None
 
         if len(bookmarks) > 0:
@@ -560,19 +558,17 @@ class Cutter:
         splitext = os.path.splitext(filename)
         extension = splitext[1]
 
-        renamed_filename = recording["disp_title"].encode(
-            kodiutils.getpreferredencoding())
+        renamed_filename = recording["disp_title"]
 
         if self.setting_recording_rename_subtitle and recording["disp_subtitle"] and recording["disp_subtitle"] != recording["disp_title"]:
-            renamed_filename += " - %s" % recording["disp_subtitle"].encode(
-                kodiutils.getpreferredencoding())
+            renamed_filename += " - %s" % recording["disp_subtitle"]
 
         if self.setting_recording_rename_timestamp:
             timeStr = time.strftime(time.strftime(
                 "%Y-%m-%d %H-%M", time.localtime(recording["start"])))
             renamed_filename += " (%s)" % timeStr
 
-        renamed_filename += extension.encode(kodiutils.getpreferredencoding())
+        renamed_filename += extension
         renamed_filename = kodiutils.makeLegalFilename(renamed_filename)
 
         if self.setting_recording_rename_directory and "directory" in recording and recording["directory"]:
@@ -580,10 +576,9 @@ class Cutter:
                 directory, os.path.sep, kodiutils.makeLegalFilename(
                     recording["directory"]))
         else:
-            target_directory = directory.encode(
-                kodiutils.getpreferredencoding())
+            target_directory = directory
 
-        xbmc.log(renamed_filename, xbmc.LOGNOTICE)
+        xbmc.log(renamed_filename, xbmc.LOGINFO)
 
         return renamed_filename, target_directory
 

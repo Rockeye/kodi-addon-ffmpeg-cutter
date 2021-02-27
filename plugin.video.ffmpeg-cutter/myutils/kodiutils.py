@@ -8,9 +8,10 @@ import re
 import sqlite3
 import string
 import time
-import urllib
+import urllib.parse
 
 import xbmc
+import xbmcvfs 
 
 OS_WINDOWS = "windows"
 OS_ANDROID = "android"
@@ -190,7 +191,7 @@ def parse_recording_from_pvr_url(pvrFilename):
     - start time
     """
 
-    pvrFilename = urllib.unquote(pvrFilename)
+    pvrFilename = urllib.parse.unquote(pvrFilename)
 
     pattern = re.compile(
         "^pvr://recordings/tv/active/(.*/)*(.+), TV \((.+)\), (19[0-9][0-9]|20[0-9][0-9])([0-9][0-9])([0-9][0-9])_([0-9][0-9])([0-9][0-9])([0-9][0-9]), (.+)\.pvr$", flags=re.S)
@@ -247,8 +248,8 @@ def json_rpc(jsonmethod, params=None):
 
 def makeLegalFilename(filename):
 
-    filename = xbmc.makeLegalFilename(filename)
-    if filename[-1:] == os.path.sep:
+    filename = xbmcvfs.makeLegalFilename(filename)
+    if filename[-1:] == os.path.sep or filename[-1:] == "/":
         filename = filename[:-1]
 
     return filename
