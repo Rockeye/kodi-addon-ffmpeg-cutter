@@ -322,13 +322,13 @@ class Cutter:
         ]
 
         try:
-            sources += kodiutils.json_rpc("Files.GetSources",
-                                          {"media": "video"})
-
+            sources_result = kodiutils.json_rpc("Files.GetSources", {"media": "video"})
+            if "sources" in sources_result:
+                sources += sources_result["sources"]
+                                            
             if kodiutils.getOS() in [kodiutils.OS_WINDOWS, kodiutils.OS_XBOX]:
                 sources = list(map(lambda s: {
-                               "label": s["label"], "file": kodiutils.make_path_for_smb_share_on_windows(s["file"])}, sources))
-
+                                "label": s["label"], "file": kodiutils.make_path_for_smb_share_on_windows(s["file"])}, sources))
         except:
             pass
 

@@ -230,20 +230,14 @@ def json_rpc(jsonmethod, params=None):
     kodi_json["params"] = params
     kodi_json["id"] = 1
 
-    json_response = xbmc.executeJSONRPC(json.dumps(kodi_json).encode("utf-8"))
-    json_object = json.loads(json_response.decode('utf-8', 'replace'))
+    json_response = xbmc.executeJSONRPC(json.dumps(kodi_json))
+    json_object = json.loads(json_response)
 
     result = None
-    if 'result' in json_object:
-        if isinstance(json_object['result'], dict):
-            for key, value in json_object['result'].iteritems():
-                if not key == "limits":
-                    result = value
-                    break
-        else:
-            return json_object['result']
-
-    return result
+    if "result" in json_object:
+        return json_object['result']
+    else:
+        return None
 
 
 def makeLegalFilename(filename):
