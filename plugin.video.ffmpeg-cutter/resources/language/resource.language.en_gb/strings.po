@@ -253,7 +253,7 @@ msgid "More than one canditate found. Select recording"
 msgstr ""
 
 msgctxt "#32115"
-msgid "duration"
+msgid "Duration"
 msgstr ""
 
 msgctxt "#32116"
@@ -261,11 +261,11 @@ msgid "Select chapters that you want to keep"
 msgstr ""
 
 msgctxt "#32117"
-msgid "visual impaired"
+msgid "Visual impaired"
 msgstr ""
 
 msgctxt "#32118"
-msgid "heaering impaired"
+msgid "Heaering impaired"
 msgstr ""
 
 msgctxt "#32119"
@@ -289,21 +289,21 @@ msgid "Filename"
 msgstr ""
 
 msgctxt "#32124"
-msgid "rename Recording"
+msgid "Rename Recording"
 msgstr ""
 
 msgctxt "#32125"
-msgid "include subtitle"
+msgid "Include subtitle"
 msgstr ""
 
 msgctxt "#32126"
-msgid "include timestamp"
+msgid "Include timestamp"
 msgstr ""
 
 msgctxt "#32127"
-msgid "use directory"
+msgid "Use directory"
 msgstr ""
 
 msgctxt "#32128"
-msgid "Aks for directory"
+msgid "Ask for directory"
 msgstr ""
