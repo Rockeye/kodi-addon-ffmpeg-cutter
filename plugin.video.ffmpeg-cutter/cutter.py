@@ -15,7 +15,7 @@ _TIMEFRAME = 300
 __PLUGIN_ID__ = "plugin.video.ffmpeg-cutter"
 __PVR_HTS_ID__ = "pvr.hts"
 
-EXTENSIONS = [None, ".mkv", ".mp4", ".avi"]
+EXTENSIONS = [None, ".mkv", ".mp4", ".avi", ".ts"]
 
 addon = xbmcaddon.Addon()
 getMsg = addon.getLocalizedString
@@ -93,6 +93,7 @@ class Cutter:
         # determine full-qualified filename
         filename, recording = self._select_source(listitem)
         if filename is None or not os.path.isfile(filename):
+            ELOG("Missing File")
             xbmcgui.Dialog().notification(getMsg(32101),
                                           getMsg(32102),
                                           xbmcgui.NOTIFICATION_ERROR)
@@ -105,6 +106,7 @@ class Cutter:
         if self.setting_streams == 0:
             streams = self._select_streams(filename, ffprobe_json)
             if streams == None:
+                ELOG("No STreams")
                 return
 
             # remove unsupported streams for container "mkv"
@@ -119,6 +121,7 @@ class Cutter:
                                            subtitle_teletext=False)
 
         if len(streams) == 0:
+            ELOG("streams == 0")
             xbmcgui.Dialog().notification(getMsg(32105),
                                           getMsg(32106),
                                           xbmcgui.NOTIFICATION_INFO)
@@ -127,12 +130,20 @@ class Cutter:
         # select bookmarks and markers
         bookmarks, markers = self._select_bookmarks(listitem, ffprobe_json)
         if len(bookmarks) > 0 and (markers == None or len(markers) == 0):
+            ELOG("no bookmarks")
+            xbmcgui.Dialog().notification("FFCUTER",
+                                          "no bookmark",
+                                          xbmcgui.NOTIFICATION_INFO)
             return
 
         # determine target directory
         if self.setting_dir_selection:
             target_directory = self._select_target_directory(filename)
             if target_directory == None:
+                ELOG("no target directory")
+                xbmcgui.Dialog().notification("FFCUTER",
+                                          "no target directory",
+                                          xbmcgui.NOTIFICATION_INFO)
                 return
         else:
             target_directory = os.path.dirname(filename)
@@ -141,6 +152,10 @@ class Cutter:
         if self.setting_confirm:
             rv = xbmcgui.Dialog().yesno(getMsg(32109), getMsg(32119))
             if not rv:
+                ELOG("no RV")
+                xbmcgui.Dialog().notification("FFCUTER",
+                                          "NO RV",
+                                          xbmcgui.NOTIFICATION_INFO)
                 return
 
         progress = xbmcgui.DialogProgressBG()
@@ -264,6 +279,10 @@ class Cutter:
         shared_location = self.setting_pvr_dirname.split(os.sep)
         shared_location = list(filter(lambda s: s != "",  shared_location))
         if len(shared_location) < 2:
+            ELOG("Shared location incorrect")
+            xbmcgui.Dialog().notification("FFCUTTER",
+                                          "Shared location incorrect",
+                                          xbmcgui.NOTIFICATION_INFO)
             return None
 
         anchor = shared_location.pop()
@@ -272,6 +291,10 @@ class Cutter:
         try:
             i = remote.index(anchor)
         except:
+            ELOG("Shared location incorrect")
+            xbmcgui.Dialog().notification("FFCUTTER",
+                                          "Shared location incorrect",
+                                          xbmcgui.NOTIFICATION_INFO)
             return None
 
         for s in remote[i:]:
